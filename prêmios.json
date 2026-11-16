@@ -1,0 +1,38 @@
+[
+ {
+  "a": "5%",
+  "b": "de desconto",
+  "msg": "5% de desconto",
+  "peso": 30
+ },
+ {
+  "a": "Brinde",
+  "b": "surpresa",
+  "msg": "um brinde surpresa",
+  "peso": 20
+ },
+ {
+  "a": "10%",
+  "b": "de desconto",
+  "msg": "10% de desconto",
+  "peso": 20
+ },
+ {
+  "a": "Frete",
+  "b": "grátis",
+  "msg": "frete grátis",
+  "peso": 15
+ },
+ {
+  "a": "15%",
+  "b": "de desconto",
+  "msg": "15% de desconto",
+  "peso": 10
+ },
+ {
+  "a": "Peça",
+  "b": "de presente",
+  "msg": "uma peça de presente",
+  "peso": 5
+ }
+]
