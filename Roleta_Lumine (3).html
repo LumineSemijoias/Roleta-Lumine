@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Roleta de Prêmios · Lumine Semijoias</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500&display=swap">
+<style>
+:root{--g:#1f3d2b;--o:#6b7a3a;--au:#b8935a;--bg:#fbf8f1;--card:#fff;--tx:#22301f;--mut:#6c7568;--ln:#e8e0cf;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root{--g:#2f5a41;--bg:#101a14;--card:#17251c;--tx:#efe9da;--mut:#a3ad9f;--ln:#2a3a2f;color-scheme:dark}}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:300 16px/1.6 Jost,system-ui,sans-serif;min-height:100vh}
+h1,h2,h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;margin:0;letter-spacing:.02em}
+button,input{font:inherit;color:inherit}
+.wrap{max-width:520px;margin:0 auto;padding:0 20px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--ln)}
+header .wrap{display:flex;align-items:center;justify-content:center;height:60px;max-width:1080px}
+.logo{font-family:'Cormorant Garamond',Georgia,serif;font-size:24px;color:var(--g);display:flex;gap:8px;align-items:center}
+@media (prefers-color-scheme:dark){.logo{color:var(--au)}}
+.star{color:var(--au)}
+section{padding:36px 0 48px;background:radial-gradient(ellipse at 50% 0%,rgba(184,147,90,.18),transparent 60%)}
+.t{text-align:center;margin-bottom:8px}.t h2{font-size:38px;color:var(--g);line-height:1.1}
+@media (prefers-color-scheme:dark){.t h2{color:var(--au)}}
+.t:after{content:"✦";display:block;color:var(--au);font-size:14px;margin-top:6px}
+.lead{text-align:center;color:var(--mut);margin:0 auto 26px;max-width:380px}
+.wheelbox{position:relative;width:min(88vw,380px);aspect-ratio:1;margin:0 auto 26px;animation:rise 1s both}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+#wheel{width:100%;height:100%;display:block;filter:drop-shadow(0 12px 26px rgba(31,61,43,.28))}
+.ptr{position:absolute;left:50%;top:-8px;width:34px;height:42px;transform:translateX(-50%);z-index:2;filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))}
+.hub{position:absolute;left:50%;top:50%;width:21%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:var(--bg);border:2px solid var(--au);display:flex;align-items:center;justify-content:center;color:var(--au);z-index:2;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+.hub svg{width:46%;height:46%;animation:glow 3.5s ease-in-out infinite}
+@keyframes glow{50%{opacity:.55;transform:scale(.9)}}
+label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);display:block;margin-bottom:3px}
+input{background:var(--card);border:1px solid var(--ln);padding:12px;width:100%;border-radius:2px}
+input:focus{outline:none;border-color:var(--au)}
+.btn{background:var(--g);color:#fff;border:0;padding:14px 30px;letter-spacing:.14em;text-transform:uppercase;font-size:13px;cursor:pointer;transition:.3s;width:100%;text-decoration:none;display:block;text-align:center}
+.btn:hover{background:var(--au)}
+.btn:disabled{opacity:.5;cursor:default;background:var(--g)}
+.btn.ghost{background:none;color:var(--g);border:1px solid var(--au)}
+@media (prefers-color-scheme:dark){.btn.ghost{color:var(--au)}}
+.btn.ghost:hover{background:var(--au);color:#fff}
+.btn.sm{padding:8px 14px;font-size:12px;width:auto}
+.btn.danger{background:#8a2f2f}
+.btn.wa{background:#25d366;color:#fff}
+.btn.wa:hover{background:#1ebe5a}
+.form{display:grid;gap:14px}
+.note{font-size:13px;color:var(--mut);text-align:center;margin-top:14px}
+.modal{position:fixed;inset:0;background:rgba(10,20,14,.7);z-index:20;display:none;align-items:center;justify-content:center;padding:16px}
+.modal.on{display:flex}
+.box{background:var(--bg);max-width:400px;width:100%;padding:34px 26px 26px;text-align:center;border:1px solid var(--ln);animation:rise .6s both}
+.box svg.big{width:44px;height:44px;color:var(--au);animation:glow 3.5s ease-in-out infinite}
+.box h2{font-size:34px;color:var(--g);margin:6px 0 4px}
+@media (prefers-color-scheme:dark){.box h2{color:var(--au)}}
+.prize{font-family:'Cormorant Garamond',Georgia,serif;font-size:30px;color:var(--au);font-weight:600;line-height:1.15;margin:10px 0 20px}
+.sp{position:fixed;pointer-events:none;color:var(--au);z-index:30;animation:fall 1.8s ease-out forwards}
+@keyframes fall{from{opacity:1;transform:translate(0,0) scale(1)}to{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.3) rotate(180deg)}}
+footer{text-align:center;padding:36px 20px;color:var(--mut);font-size:13px;border-top:1px solid var(--ln)}
+/* ADM */
+#adm{display:none;border-top:1px solid var(--ln);background:var(--bg);padding:40px 0 56px}
+#adm .wrap{max-width:640px}
+.pr{background:var(--card);border:1px solid var(--ln);padding:14px;margin-bottom:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pr .full{grid-column:1/-1}
+.pr .bt{display:flex;align-items:end;gap:10px;justify-content:space-between}
+.pct{font-size:13px;color:var(--au);letter-spacing:.08em}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:30px;background:var(--g);color:#fff;padding:10px 20px;z-index:40;display:none}
+</style>
+</head>
+<body>
+<header><div class="wrap"><div class="logo"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" class="star"><path d="M12 1l2.2 8.8L23 12l-8.8 2.2L12 23l-2.2-8.8L1 12l8.8-2.2z"/></svg>Lumine</div></div></header>
+
+<section>
+ <div class="wrap">
+  <div class="t"><h2>Roleta de Prêmios</h2></div>
+  <p class="lead" id="lead">Digite seu nome, gire a roleta e ganhe um mimo da Lumine Semijoias.</p>
+
+  <div class="wheelbox">
+   <svg class="ptr" viewBox="0 0 34 42"><path d="M17 42L2 12A17 17 0 0 1 32 12z" fill="#b8935a" stroke="#fbf8f1" stroke-width="2"/><circle cx="17" cy="13" r="4.5" fill="#fbf8f1"/></svg>
+   <canvas id="wheel"></canvas>
+   <div class="hub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1l2.2 8.8L23 12l-8.8 2.2L12 23l-2.2-8.8L1 12l8.8-2.2z"/></svg></div>
+  </div>
+
+  <div class="form" id="form">
+   <div><label for="nm">Seu nome</label><input id="nm" placeholder="Como podemos te chamar?" autocomplete="given-name" maxlength="40"></div>
+   <button class="btn" id="go">Girar a roleta</button>
+  </div>
+  <div class="form" id="done" style="display:none">
+   <a class="btn wa" id="again" target="_blank" rel="noopener">Enviar prêmio pelo WhatsApp</a>
+  </div>
+  <p class="note" id="note">Uma participação por pessoa ✦</p>
+ </div>
+</section>
+
+<!-- Painel do ADM: só aparece abrindo o arquivo com ?admin=1 e digitando o PIN -->
+<div id="adm">
+ <div class="wrap">
+  <div id="pinbox" class="form">
+   <div class="t"><h2>Área do administrador</h2></div>
+   <div><label for="pin">PIN</label><input id="pin" type="password" inputmode="numeric" placeholder="Digite o PIN" autocomplete="off"></div>
+   <button class="btn" id="pinok">Entrar</button>
+  </div>
+  <div id="panel" style="display:none">
+   <div class="t"><h2>Prêmios da roleta</h2></div>
+   <p class="lead">Edite os prêmios e toque em <b>Publicar</b>: a roleta das clientes se atualiza sozinha em cerca de 1 minuto. <b>Testar</b> só mostra a mudança aqui neste aparelho.</p>
+   <div id="rows"></div>
+   <div class="row">
+    <button class="btn ghost sm" id="addp">+ Novo prêmio</button>
+   </div>
+   <div class="row">
+    <button class="btn" id="pubp" style="flex:1">Publicar</button>
+    <button class="btn ghost" id="savep" style="flex:1">Testar</button>
+   </div>
+   <details id="ghbox" class="pr" style="display:block;margin-top:22px">
+    <summary style="cursor:pointer;letter-spacing:.08em;text-transform:uppercase;font-size:12px;color:var(--mut)">Conexão com o GitHub</summary>
+    <p class="note" style="text-align:left">Preencha uma vez. Os dados ficam só neste aparelho, nunca dentro do arquivo da roleta.</p>
+    <div class="form" style="grid-template-columns:1fr 1fr;gap:10px">
+     <div><label>Usuário</label><input id="gh_user" placeholder="seu-usuario" autocomplete="off"></div>
+     <div><label>Repositório</label><input id="gh_repo" placeholder="roleta" autocomplete="off"></div>
+     <div><label>Branch</label><input id="gh_branch" placeholder="main" autocomplete="off"></div>
+     <div><label>Arquivo dos prêmios</label><input id="gh_path" placeholder="premios.json" autocomplete="off"></div>
+     <div style="grid-column:1/-1"><label>Token (Contents: leitura e escrita)</label><input id="gh_token" type="password" placeholder="github_pat_…" autocomplete="off"></div>
+    </div>
+   </details>
+   <div class="row">
+    <button class="btn ghost sm" id="dlp">Baixar HTML atualizado</button>
+    <button class="btn ghost sm" id="resetp">Voltar aos prêmios originais</button>
+    <button class="btn ghost sm" id="unlock">Liberar giro neste aparelho</button>
+   </div>
+  </div>
+ </div>
+</div>
+
+<footer>Lumine Semijoias · Acenda sua luz</footer>
+
+<div class="modal" id="md">
+ <div class="box">
+  <svg class="big" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1l2.2 8.8L23 12l-8.8 2.2L12 23l-2.2-8.8L1 12l8.8-2.2z"/></svg>
+  <h2 id="mt">Parabéns!</h2>
+  <div style="color:var(--mut)">Você ganhou</div>
+  <div class="prize" id="mp"></div>
+  <a class="btn wa" id="mw" target="_blank" rel="noopener">Enviar pelo WhatsApp</a>
+  <p class="note" id="mn"></p>
+ </div>
+</div>
+<div id="toast"></div>
+
+<script id="data" type="application/json">[{"a":"5%","b":"de desconto","msg":"5% de desconto","peso":30},{"a":"Brinde","b":"surpresa","msg":"um brinde surpresa","peso":20},{"a":"10%","b":"de desconto","msg":"10% de desconto","peso":20},{"a":"Frete","b":"grátis","msg":"frete grátis","peso":15},{"a":"15%","b":"de desconto","msg":"15% de desconto","peso":10},{"a":"Peça","b":"de presente","msg":"uma peça de presente","peso":5}]</script>
+<script id="app">
+/* ===== CONFIGURAÇÃO ===== */
+const NUMERO='5527999557358';   // WhatsApp que recebe a mensagem do prêmio
+const PIN_ADMIN='1234';         // PIN da área do administrador (troque aqui)
+const CORES=[['#1f3d2b','#fbf8f1'],['#fbf8f1','#1f3d2b'],['#6b7a3a','#fbf8f1'],['#b8935a','#fff']];
+/* ========================= */
+
+const SRC='<!doctype html>\n'+document.documentElement.outerHTML; // cópia limpa do arquivo, usada para "Baixar HTML atualizado"
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const toast=m=>{const t=$('#toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',2600)};
+let ADMIN=/[?&]admin=1/.test(location.search);
+const TESTE=()=>ADMIN||/[?&]teste=1/.test(location.search); // admin/teste: gira à vontade, sem salvar
+
+const PADRAO=JSON.parse($('#data').textContent);
+let PREMIOS=PADRAO.slice();
+let N=PREMIOS.length,A=2*Math.PI/N;
+const setP=p=>{PREMIOS=p;N=p.length;A=2*Math.PI/N};
+function carregaLocal(){try{const s=JSON.parse(localStorage.getItem('lumine-roleta-premios')||'null');if(Array.isArray(s)&&s.length>=2)setP(s)}catch(e){}}
+if(ADMIN)carregaLocal();
+/* prêmios publicados: lê o premios.json que fica junto da roleta no GitHub */
+fetch('premios.json?t='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
+ if(!Array.isArray(j)||j.length<2||girando||j.some(p=>!p||!p.a||!p.msg))return;
+ if(JSON.stringify(j)===JSON.stringify(PREMIOS))return;
+ setP(j);if(ADMIN)carregaLocal();
+ if(!TESTE()){const v0=salvo();if(v0&&v0.p)return jaGirou(v0)}
+ rot=0;desenha();if($('#rows').children.length)linhas();
+}).catch(()=>{});
+
+const cv=$('#wheel'),ctx=cv.getContext('2d');
+let rot=0,girando=false,size=0;
+
+function cor(i){
+ if(i===N-1&&N>1&&i%CORES.length===0)return CORES[2];
+ return CORES[i%CORES.length];
+}
+function desenha(){
+ const dpr=window.devicePixelRatio||1,w=cv.clientWidth;
+ if(cv.width!==Math.round(w*dpr)){cv.width=cv.height=Math.round(w*dpr)}
+ size=cv.width;const R=size/2;
+ ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,size,size);
+ ctx.translate(R,R);
+ ctx.beginPath();ctx.arc(0,0,R-2,0,7);ctx.fillStyle='#b8935a';ctx.fill();
+ ctx.beginPath();ctx.arc(0,0,R-size*.035,0,7);ctx.fillStyle='#fbf8f1';ctx.fill();
+ const r=R-size*.05;
+ ctx.save();ctx.rotate(rot);
+ PREMIOS.forEach((p,i)=>{
+  const a0=-Math.PI/2+i*A,a1=a0+A,[bg,fg]=cor(i);
+  ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,r,a0,a1);ctx.closePath();
+  ctx.fillStyle=bg;ctx.fill();ctx.strokeStyle='#b8935a';ctx.lineWidth=size*.004;ctx.stroke();
+  ctx.save();ctx.rotate(a0+A/2);ctx.textAlign='right';ctx.fillStyle=fg;
+  const x=r-size*.06,maxW=x-size*.13;
+  let f1=size*.075;ctx.font=`600 ${f1}px 'Cormorant Garamond',Georgia,serif`;
+  while(ctx.measureText(p.a).width>maxW&&f1>size*.03){f1*=.92;ctx.font=`600 ${f1}px 'Cormorant Garamond',Georgia,serif`}
+  ctx.fillText(p.a,x,p.b?-size*.004:size*.02);
+  if(p.b){let f2=size*.042;ctx.font=`400 ${f2}px Jost,system-ui,sans-serif`;
+   while(ctx.measureText(p.b).width>maxW&&f2>size*.025){f2*=.92;ctx.font=`400 ${f2}px Jost,system-ui,sans-serif`}
+   ctx.fillText(p.b,x,size*.045)}
+  ctx.restore();
+ });
+ ctx.restore();
+ for(let i=0;i<N*2;i++){const t=i*Math.PI/N;ctx.beginPath();ctx.arc(Math.cos(t)*(R-size*.0175),Math.sin(t)*(R-size*.0175),size*.006,0,7);ctx.fillStyle='#fbf8f1';ctx.fill()}
+}
+addEventListener('resize',desenha);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(desenha);
+desenha();
+
+function sorteia(){
+ const t=PREMIOS.reduce((s,p)=>s+(+p.peso||0),0);let x=Math.random()*t;
+ for(let i=0;i<N;i++){x-=(+PREMIOS[i].peso||0);if(x<0)return i}return N-1;
+}
+function link(nome,p){
+ const m=`Olá! Me Chamo ${nome} e Ganhei na Roleta da Lumine ✦\n\n🎁 Prêmio: ${p.msg}\n\nGostaria de resgatar meu prêmio!`;
+ return `https://wa.me/${NUMERO}?text=${encodeURIComponent(m)}`;
+}
+const salvo=()=>{try{return JSON.parse(localStorage.getItem('lumine-roleta')||'null')}catch(e){return null}};
+const guarda=v=>{try{localStorage.setItem('lumine-roleta',JSON.stringify(v))}catch(e){}};
+
+function brilho(){
+ const r=$('.wheelbox').getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+ for(let i=0;i<22;i++){const s=document.createElement('span');s.className='sp';s.textContent='✦';
+  const ang=Math.random()*7,d=80+Math.random()*160;
+  s.style.cssText=`left:${cx}px;top:${cy}px;font-size:${10+Math.random()*14}px;--dx:${Math.cos(ang)*d}px;--dy:${Math.sin(ang)*d}px`;
+  document.body.appendChild(s);setTimeout(()=>s.remove(),1900)}
+}
+
+let timer=null;
+function mostraResultado(v,auto){
+ const p=PREMIOS[v.i]||v.p,url=link(v.nome,p);
+ $('#mt').textContent=auto?`Parabéns, ${v.nome}!`:`Seu prêmio, ${v.nome}`;
+ $('#mp').textContent=p.msg.charAt(0).toUpperCase()+p.msg.slice(1);
+ $('#mw').href=url;$('#again').href=url;
+ $('#md').classList.add('on');
+ const nt=$('#mn');nt.textContent='';
+ if(auto){
+  let n=4;nt.textContent=`Abrindo o WhatsApp em ${n}s…`;
+  timer=setInterval(()=>{n--;if(n<=0){clearInterval(timer);nt.textContent='';location.href=url}else nt.textContent=`Abrindo o WhatsApp em ${n}s…`},1000);
+  $('#mw').onclick=()=>clearInterval(timer);
+ }
+}
+$('#md').onclick=e=>{if(e.target.id==='md'){clearInterval(timer);$('#mn').textContent='';$('#md').classList.remove('on')}};
+
+function jaGirou(v){
+ $('#form').style.display='none';$('#done').style.display='grid';
+ $('#lead').textContent=`Olá, ${v.nome}! Seu prêmio já foi sorteado.`;
+ $('#note').textContent='Toque no botão para reenviar a mensagem ✦';
+ const p=v.p;$('#again').href=link(v.nome,p);
+ const i=PREMIOS.findIndex(x=>x.msg===p.msg);rot=-((i<0?0:i)+.5)*A;desenha();
+}
+
+$('#go').onclick=()=>{
+ if(girando||!PREMIOS.length)return;
+ const nome=$('#nm').value.trim();
+ if(!nome){$('#nm').focus();$('#nm').style.borderColor='#8a2f2f';return}
+ $('#nm').style.borderColor='';
+ girando=true;$('#go').disabled=true;$('#nm').disabled=true;$('#go').textContent='Girando…';
+ const i=sorteia(),jit=(Math.random()-.5)*A*.7;
+ const alvo=((-(i+.5)*A+jit)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
+ const ini=rot%(2*Math.PI),fim=ini+2*Math.PI*6+((alvo-ini)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
+ const dur=5200,t0=performance.now();
+ (function f(t){
+  const k=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-k,4);
+  rot=ini+(fim-ini)*e;desenha();
+  if(k<1)return requestAnimationFrame(f);
+  girando=false;rot=fim;
+  const v={nome,i,p:PREMIOS[i]};
+  brilho();setTimeout(()=>mostraResultado(v,!TESTE()),500);
+  if(TESTE()){$('#go').disabled=false;$('#nm').disabled=false;$('#go').textContent='Girar a roleta'}
+  else{guarda(v);jaGirou(v)}
+ })(t0);
+};
+
+if(!TESTE()){const v0=salvo();if(v0&&v0.p)jaGirou(v0)}
+
+/* ===== Área do ADM ===== */
+function iniciaAdmin(){
+ ADMIN=true;
+ $('#adm').style.display='block';
+ $('#form').style.display='grid';$('#done').style.display='none';
+ $('#lead').textContent='Digite seu nome, gire a roleta e ganhe um mimo da Lumine Semijoias.';
+ $('#note').textContent='Modo administrador: os giros são só de teste e não ficam salvos.';
+ const abre=()=>{$('#pinbox').style.display='none';$('#panel').style.display='block';carregaLocal();desenha();linhas()};
+ let ok=false;try{ok=sessionStorage.getItem('lumine-adm')==='1'}catch(e){}
+ if(ok)abre();
+ $('#pinok').onclick=()=>{if($('#pin').value===PIN_ADMIN){try{sessionStorage.setItem('lumine-adm','1')}catch(e){}abre()}else{$('#pin').value='';toast('PIN incorreto')}};
+ $('#pin').onkeydown=e=>{if(e.key==='Enter')$('#pinok').click()};
+ setTimeout(()=>$('#adm').scrollIntoView({behavior:'smooth'}),50);
+}
+if(ADMIN)iniciaAdmin();
+/* acesso escondido: toque 5 vezes seguidas na logo "Lumine" */
+let toques=0,tt=null;
+$('.logo').addEventListener('click',()=>{
+ toques++;clearTimeout(tt);tt=setTimeout(()=>toques=0,2500);
+ if(toques>=5){toques=0;if($('#adm').style.display==='block')$('#adm').scrollIntoView({behavior:'smooth'});else iniciaAdmin()}
+});
+function linhas(lista=PREMIOS){
+ $('#rows').innerHTML=lista.map((p,i)=>`<div class="pr" data-i="${i}">
+  <div><label>Texto grande</label><input class="ra" value="${esc(p.a)}" maxlength="14" placeholder="10%"></div>
+  <div><label>Texto pequeno</label><input class="rb" value="${esc(p.b||'')}" maxlength="18" placeholder="de desconto"></div>
+  <div class="full"><label>Frase na mensagem do WhatsApp</label><input class="rm" value="${esc(p.msg)}" maxlength="60" placeholder="10% de desconto"></div>
+  <div class="bt full"><div style="flex:1"><label>Chance (peso)</label><input class="rp" type="number" min="1" step="1" value="${+p.peso||1}"></div><span class="pct"></span><button class="btn danger sm" data-del="${i}">Remover</button></div>
+ </div>`).join('');
+ pct();
+}
+function ler(){
+ return [...document.querySelectorAll('#rows .pr')].map(r=>({a:r.querySelector('.ra').value.trim(),b:r.querySelector('.rb').value.trim(),msg:r.querySelector('.rm').value.trim(),peso:Math.max(1,parseInt(r.querySelector('.rp').value)||1)}));
+}
+function pct(){
+ const l=ler(),t=l.reduce((s,p)=>s+p.peso,0)||1;
+ document.querySelectorAll('#rows .pr').forEach((r,i)=>{r.querySelector('.pct').textContent='≈ '+Math.round(l[i].peso/t*100)+'%'});
+}
+$('#rows').addEventListener('input',pct);
+$('#rows').addEventListener('click',e=>{
+ const d=e.target.dataset.del;if(d===undefined)return;
+ const l=ler();if(l.length<=2)return toast('Mantenha pelo menos 2 prêmios');
+ l.splice(+d,1);linhas(l);
+});
+$('#addp').onclick=()=>{const l=ler();if(l.length>=12)return toast('Máximo de 12 prêmios');l.push({a:'',b:'',msg:'',peso:10});linhas(l)};
+function valida(){
+ const l=ler();
+ if(l.length<2){toast('Mantenha pelo menos 2 prêmios');return null}
+ for(const p of l){if(!p.a||!p.msg){toast('Preencha o texto grande e a frase da mensagem de todos os prêmios');return null}}
+ return l;
+}
+$('#savep').onclick=()=>{
+ const l=valida();if(!l)return;
+ setP(l);rot=0;desenha();
+ try{localStorage.setItem('lumine-roleta-premios',JSON.stringify(l))}catch(e){}
+ toast('Prêmios em teste neste aparelho. Toque em Publicar para valer para as clientes.');
+};
+$('#dlp').onclick=()=>{
+ const l=valida();if(!l)return;
+ const json=JSON.stringify(l).replace(/</g,'\\u003c');
+ const html=SRC.replace(/(<script id="data" type="application\/json">)[\s\S]*?(<\/script>)/,(m,a,b)=>a+json+b);
+ const b=new Blob([html],{type:'text/html'}),a=document.createElement('a');
+ a.href=URL.createObjectURL(b);a.download='Roleta_Lumine.html';document.body.appendChild(a);a.click();a.remove();
+};
+const GH_KEY='lumine-gh';
+function ghPreenche(){let c={};try{c=JSON.parse(localStorage.getItem(GH_KEY)||'{}')}catch(e){}
+ $('#gh_user').value=c.user||'';$('#gh_repo').value=c.repo||'';$('#gh_branch').value=c.branch||'';$('#gh_path').value=c.path||'';$('#gh_token').value=c.token||'';
+ $('#ghbox').open=!(c.user&&c.repo&&c.token)}
+ghPreenche();
+$('#pubp').onclick=async()=>{
+ const l=valida();if(!l)return;
+ const c={user:$('#gh_user').value.trim(),repo:$('#gh_repo').value.trim(),branch:$('#gh_branch').value.trim()||'main',path:($('#gh_path').value.trim()||'premios.json').replace(/^\/+/,''),token:$('#gh_token').value.trim()};
+ if(!c.user||!c.repo||!c.token){$('#ghbox').open=true;return toast('Preencha usuário, repositório e token do GitHub')}
+ try{localStorage.setItem(GH_KEY,JSON.stringify(c))}catch(e){}
+ const btn=$('#pubp');btn.disabled=true;btn.textContent='Publicando…';
+ const api=`https://api.github.com/repos/${encodeURIComponent(c.user)}/${encodeURIComponent(c.repo)}/contents/${c.path.split('/').map(encodeURIComponent).join('/')}`;
+ const H={Authorization:'Bearer '+c.token,Accept:'application/vnd.github+json'};
+ const erro=async r=>{let m='';try{m=(await r.json()).message||''}catch(e){}return r.status===401?'token inválido ou expirado':r.status===404?'repositório, branch ou permissão do token não encontrados':`erro ${r.status} ${m}`};
+ try{
+  let sha;const g=await fetch(api+'?ref='+encodeURIComponent(c.branch),{headers:H,cache:'no-store'});
+  if(g.ok)sha=(await g.json()).sha;else if(g.status!==404)throw new Error(await erro(g));
+  const body={message:'Atualiza prêmios da roleta',content:btoa(unescape(encodeURIComponent(JSON.stringify(l,null,1)))),branch:c.branch};if(sha)body.sha=sha;
+  const p=await fetch(api,{method:'PUT',headers:{...H,'Content-Type':'application/json'},body:JSON.stringify(body)});
+  if(!p.ok)throw new Error(await erro(p));
+  setP(l);rot=0;desenha();try{localStorage.removeItem('lumine-roleta-premios')}catch(e){}
+  toast('Publicado! As clientes veem a mudança em cerca de 1 minuto.');
+ }catch(e){toast('Não consegui publicar: '+e.message)}
+ btn.disabled=false;btn.textContent='Publicar';
+};
+$('#resetp').onclick=()=>{if(confirm('Voltar aos prêmios originais do arquivo?')){try{localStorage.removeItem('lumine-roleta-premios')}catch(e){}setP(PADRAO.slice());rot=0;desenha();linhas();toast('Prêmios originais restaurados')}};
+$('#unlock').onclick=()=>{try{localStorage.removeItem('lumine-roleta')}catch(e){}toast('Giro liberado neste aparelho')};
+</script>
+</body>
+</html>
